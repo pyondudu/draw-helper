@@ -130,3 +130,29 @@ export function renderHome(container, round, roundDate, settings, records) {
   }
   container.replaceChildren(...parts);
 }
+
+// 這一輪中了的項目，固定在首頁最上方。時間照原文顯示，不解析、不倒數。
+export function renderWinners(container, roundDate, records) {
+  const won = Object.values(records)
+    .filter((r) => r.status === "won" && r.round === roundDate)
+    .sort((a, b) => a.at - b.at);
+  if (!won.length) {
+    container.replaceChildren();
+    return;
+  }
+  const card = el("div", "card winners");
+  card.append(el("p", "winners-title", `這一輪中了 ${won.length} 筆`));
+  for (const r of won) {
+    const item = el("div", "winner");
+    item.append(
+      el("p", "winner-where", r.store),
+      el("p", "winner-product", r.product),
+      el("p", "muted small", r.startText),
+    );
+    card.append(item);
+  }
+  card.append(
+    el("p", "muted small", "購買規定以門市公告為準，實名制要本人到店。"),
+  );
+  container.replaceChildren(card);
+}

@@ -2,7 +2,7 @@ import { loadDraws, SOURCE_PAGE } from "./source.js";
 import { buildRound } from "./round.js";
 import { loadSettings, updateNewProducts } from "./settings.js";
 import { loadRecords } from "./records.js";
-import { renderHome } from "./home-view.js";
+import { renderHome, renderWinners } from "./home-view.js";
 import { renderSettings } from "./settings-view.js";
 import { renderDraw, stopDrawView } from "./draw-view.js";
 import { renderList } from "./list-view.js";
@@ -10,6 +10,7 @@ import { el } from "./dom.js";
 
 const statusEl = document.getElementById("status");
 const homeRangeEl = document.getElementById("homeRange");
+const winnersEl = document.getElementById("winners");
 const homeEl = document.getElementById("home");
 const settingsEl = document.getElementById("settings");
 const settingsBody = document.getElementById("settingsBody");
@@ -36,11 +37,13 @@ function shortDate(date) {
 }
 
 function renderLoading() {
+  winnersEl.replaceChildren();
   statusEl.replaceChildren(el("p", "muted", "讀取中…"));
   homeRangeEl.replaceChildren();
 }
 
 function renderError(reason) {
+  winnersEl.replaceChildren();
   const box = el("div", "error");
   box.append(
     el("p", "error-title", "資料讀取失敗"),
@@ -104,7 +107,9 @@ function route() {
   } else if (page === "list") {
     renderList(listBody, round, roundDate, settings);
   } else if (round) {
-    renderHome(homeRangeEl, round, roundDate, settings, loadRecords());
+    const records = loadRecords();
+    renderWinners(winnersEl, roundDate, records);
+    renderHome(homeRangeEl, round, roundDate, settings, records);
   }
   window.scrollTo(0, 0);
 }
