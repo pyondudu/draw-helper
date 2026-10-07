@@ -1,0 +1,5 @@
+node_modules
+dist
+
+# 個人設定，不上傳
+CLAUDE.local.md

@@ -1,0 +1,6 @@
+node_modules
+dist
+package-lock.json
+
+# 使用者寫的需求說明，保持原樣
+抽選小幫手_需求說明.md

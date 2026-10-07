@@ -1,0 +1,55 @@
+:root {
+  color-scheme: dark;
+  --bg: #111418;
+  --text: #e8eaed;
+  --muted: #9aa0a6;
+  --accent: #f29b38;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font-family:
+    system-ui,
+    -apple-system,
+    "Noto Sans TC",
+    sans-serif;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+.topbar {
+  padding: 12px 16px;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+main {
+  flex: 1;
+  padding: 0 16px;
+}
+
+.placeholder {
+  color: var(--muted);
+}
+
+.source {
+  padding: 16px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.source a {
+  color: var(--accent);
+}
