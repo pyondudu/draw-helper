@@ -43,6 +43,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 必須同時支援 Android Chrome 與 iOS Safari
 
 - 加到主畫面後的版本都要實測：能跳到 LINE，回到 App 時畫面停在原本的位置。
+- Android 移除 App 後重新安裝，可能出現「無法開啟應用程式」或只能加成 Chrome 捷徑（2026-10-07 遇過）：重開機無效，要 Chrome ⋮ → 設定 → 網站設定 → 所有網站 → `pyondudu.github.io` →「清除並重設」才能重裝。這也會清掉 App 的設定與抽選紀錄，要先提醒使用者。
 - 開發機是 **VMware 虛擬機（NAT 網路）**：手機無法用區網 IP 連到 dev server，實機測試要用部署到 GitHub Pages 後的網址。
 
 ## 與使用者協作
