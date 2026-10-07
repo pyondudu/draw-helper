@@ -14,6 +14,11 @@
   box-sizing: border-box;
 }
 
+/* 讓 hidden 屬性一定有效（.btn 等樣式設了 display 會蓋過它） */
+[hidden] {
+  display: none !important;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
@@ -344,4 +349,81 @@ details.progress[open] .progress-name::before {
 
 .missing {
   margin-top: 12px;
+}
+
+.actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.progress-actions {
+  padding: 10px 16px 14px;
+  border-top: 1px solid var(--surface-2);
+}
+
+.progress-actions .btn.small {
+  margin-top: 0;
+}
+
+.draw-title {
+  margin: 0 0 12px;
+  font-size: 1.15rem;
+}
+
+.draw-card {
+  text-align: center;
+}
+
+.draw-where {
+  font-size: 1.1rem;
+}
+
+.draw-card p.draw-product {
+  margin: 4px 0 8px;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.btn.big {
+  display: block;
+  width: 100%;
+  padding: 18px;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.btn.big:disabled {
+  opacity: 0.7;
+  font-variant-numeric: tabular-nums;
+}
+
+.draw-results {
+  display: flex;
+  gap: 10px;
+}
+
+.draw-results .btn {
+  flex: 1;
+  padding: 16px 8px;
+  font-size: 1.05rem;
+}
+
+.btn.good {
+  background: var(--good);
+  color: #111418;
+  font-weight: 700;
+}
+
+.btn.ghost {
+  background: transparent;
+  border: 1px solid var(--surface-2);
+}
+
+.draw-next {
+  margin-top: 16px;
+}
+
+.draw-next p {
+  margin: 0 0 6px;
 }

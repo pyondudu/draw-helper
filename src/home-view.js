@@ -66,9 +66,16 @@ export function renderHome(container, round, roundDate, settings, records) {
   if (wanted.length === 0) {
     card.append(el("p", "muted", "還沒有勾選想要的款式。"));
   }
+  const actions = el("div", "actions-row");
+  if (drawnLinks < allLinks.length) {
+    const start = el("a", "btn primary", "開始連續抽選");
+    start.href = "#draw";
+    actions.append(start);
+  }
   const link = el("a", "btn", "設定門市和款式");
   link.href = "#settings";
-  card.append(link);
+  actions.append(link);
+  card.append(actions);
 
   // ---- 每個想要的款式 ----
   const list = el("div", "progress-list");
@@ -100,6 +107,13 @@ export function renderHome(container, round, roundDate, settings, records) {
         el("span", "muted small", startLabel(store)),
         el("span", drawn ? "tag" : "tag todo", drawn ? "已抽" : "未抽"),
       );
+      details.append(row);
+    }
+    if (doneStores < stores.length) {
+      const only = el("a", "btn small", "全部抽完");
+      only.href = `#draw/${encodeURIComponent(product.key)}`;
+      const row = el("div", "progress-actions");
+      row.append(only);
       details.append(row);
     }
     list.append(details);

@@ -4,6 +4,7 @@ import { loadSettings, updateNewProducts } from "./settings.js";
 import { loadRecords } from "./records.js";
 import { renderHome } from "./home-view.js";
 import { renderSettings } from "./settings-view.js";
+import { renderDraw, stopDrawView } from "./draw-view.js";
 import { el } from "./dom.js";
 
 const statusEl = document.getElementById("status");
@@ -11,6 +12,8 @@ const homeRangeEl = document.getElementById("homeRange");
 const homeEl = document.getElementById("home");
 const settingsEl = document.getElementById("settings");
 const settingsBody = document.getElementById("settingsBody");
+const drawEl = document.getElementById("draw");
+const drawBody = document.getElementById("drawBody");
 const refreshBtn = document.getElementById("refresh");
 
 const settings = loadSettings();
@@ -80,15 +83,22 @@ function renderSummary({ summary, round: roundDate, readAt, previous }) {
 }
 
 // 用網址的 # 切換頁面，手機的「上一頁」也能回首頁
+// #settings：設定；#draw：連續抽選；#draw/<款式 key>：只抽這一款
 function route() {
-  const onSettings = location.hash === "#settings" && round;
-  homeEl.hidden = !!onSettings;
-  settingsEl.hidden = !onSettings;
-  if (onSettings) {
+  const hash = decodeURIComponent(location.hash.slice(1));
+  const page = round ? hash.split("/")[0] : "";
+  homeEl.hidden = page === "settings" || page === "draw";
+  settingsEl.hidden = page !== "settings";
+  drawEl.hidden = page !== "draw";
+  stopDrawView();
+
+  if (page === "settings") {
     renderSettings(settingsBody, round, settings);
-  } else {
-    if (round)
-      renderHome(homeRangeEl, round, roundDate, settings, loadRecords());
+  } else if (page === "draw") {
+    const onlyKey = hash.slice("draw/".length) || null;
+    renderDraw(drawBody, round, roundDate, settings, onlyKey);
+  } else if (round) {
+    renderHome(homeRangeEl, round, roundDate, settings, loadRecords());
   }
   window.scrollTo(0, 0);
 }
