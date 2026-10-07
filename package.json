@@ -7,7 +7,7 @@
     "build": "vite build",
     "preview": "vite preview --host",
     "format": "prettier --write .",
-    "check": "node scripts/check-parse.mjs"
+    "check": "node scripts/check.mjs"
   },
   "type": "module",
   "devDependencies": {

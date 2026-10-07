@@ -26,7 +26,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - `npm run dev`：開發 server（VM 是 NAT，手機連不到，實機測試用 GitHub Pages）
 - `npm run build` / `npm run preview`：正式版建置與預覽
-- `npm run check`：驗證 `src/parse.js`。先測 `test/fixtures/` 的假資料，再連網比對原作者兩個固定版本的筆數（需求說明第八節）。改解析程式後一定要跑。
+- `npm run check`（`scripts/check.mjs`）：驗證解析（`src/parse.js`）、門市對照表（`src/stores.js`）、款式整理（`src/products.js`）。先測假資料和手寫案例，再連網比對原作者兩個固定版本。改這三個檔案後一定要跑，並把新遇到的寫法加進測試案例。
 - `node scripts/make-icons.mjs`：重新產生 `public/` 的 PWA 圖示
 
 ## 架構與硬性規則
@@ -35,6 +35,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **不把原作者的資料存進 repo**：每次使用時才 `fetch`。測試腳本可以讀固定版本，但不能存檔；離線測試用自己手寫的假門市範例檔。
 - **抽選資料不可以被離線快取**（service worker 只快取 App 本身）。讀不到或解析出 0 筆時，要顯示「資料讀取失敗」和「打開原頁面」按鈕，**不可以顯示空清單**。
 - 原作者的 HTML 用 `DOMParser` 解析（`src/parse.js` 的 `parseDrawHtml`；Node 測試時傳入 `linkedom` 的 DOMParser），文字一律用 `textContent`，**不要用 innerHTML**。連結只接受 `https://lin.ee/` 或 `https://line.me/` 開頭，只讀 `.draw-list` 裡的內容。
+- 款式以型號分組（`identifyProduct` 的 key，例如 `UX-19`、`CX-00:新世紀福音戰士`、`其他:超人力霸王聯名款`），這個 key 也用來跨輪記住勾選，改格式會讓使用者的勾選失效。-00 型號靠 `ZERO_ALIASES` 依名稱分開，新商品要補進去。
 - 使用者的設定和紀錄只存 localStorage，不上傳、不登入。
 - 打開 LINE 抽選只用使用者點擊的 `<a href target="_blank" rel="noopener">`，不用程式自動跳轉。不代替使用者送出抽選、不自動加好友。
 - 畫面底部要註明資料來源並附原頁面連結。
