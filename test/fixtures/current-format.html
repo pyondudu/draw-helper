@@ -1,0 +1,102 @@
+<!doctype html>
+<!-- 手寫的假資料（現行格式），門市與連結都是虛構的 -->
+<html>
+  <body>
+    <h1>待10/9更新！</h1>
+    <!-- 加好友清單：不是抽選，要排除 -->
+    <div class="friend-list" hidden>
+      <a href="https://line.me/ti/p/~@fakefriend">加好友</a>
+    </div>
+    <script>
+      window.shouldNotRun = true;
+    </script>
+    <div class="draw-list">
+      <div class="draw-city-group" data-draw-city-group="桃園市">
+        <div class="draw-city">桃園市</div>
+        <div
+          class="draw-store"
+          data-draw-city="桃園市"
+          data-draw-start-time="11:00"
+        >
+          <div class="draw-store-name">Funbox-假桃園站前店</div>
+          <div class="draw-start">
+            抽選/購買時間：2026/10/09 11:00~2026/10/10 21:00
+          </div>
+          <div class="draw-items">
+            <div
+              class="draw-item draw-item-clickable"
+              data-draw-href="https://lin.ee/fakeA01"
+            >
+              <div class="draw-product">UX-01 假蒼龍</div>
+            </div>
+            <div
+              class="draw-item draw-item-clickable"
+              data-draw-href="https://lin.ee/fakeA02"
+            >
+              <div class="draw-product">CX-11假帝王</div>
+            </div>
+            <!-- 同一個連結貼兩次 -->
+            <div
+              class="draw-item draw-item-clickable"
+              data-draw-href="https://lin.ee/fakeA02"
+            >
+              <div class="draw-product">CX-11假帝王</div>
+            </div>
+            <!-- 不允許的連結，要丟掉 -->
+            <div
+              class="draw-item draw-item-clickable"
+              data-draw-href="javascript:alert(1)"
+            >
+              <div class="draw-product">BX-99 壞連結</div>
+            </div>
+            <!-- 沒有連結 = 現場販售 -->
+            <div class="draw-item">
+              <div class="draw-product">BX-37 假戰鬥盤（採取上架販售）</div>
+            </div>
+          </div>
+        </div>
+        <div class="draw-store" data-draw-city="桃園市" data-draw-start-time="">
+          <div class="draw-store-name">Funbox 假中壢店</div>
+          <div class="draw-start">
+            抽選/購買時間：2026/10/09～2026/10/10（貼文未註明起始時間）
+          </div>
+          <div class="draw-items">
+            <div
+              class="draw-item draw-item-clickable"
+              data-draw-href="https://line.me/R/fake/B01"
+            >
+              <div class="draw-product">UX-01 假蒼龍</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="draw-city-group" data-draw-city-group="新竹縣">
+        <div class="draw-city">新竹縣</div>
+        <div
+          class="draw-store"
+          data-draw-city="新竹縣"
+          data-draw-start-time="開店"
+        >
+          <div class="draw-store-name">Funbox 假竹北店</div>
+          <div class="draw-start">
+            抽選/購買時間：2026/10/09 開店~2026/10/10 21:00前
+          </div>
+          <div class="draw-items">
+            <div
+              class="draw-item draw-item-clickable"
+              data-draw-href="https://lin.ee/fakeC01"
+            >
+              <div class="draw-product">CX-00 假福音戰士改造組</div>
+            </div>
+            <div
+              class="draw-item draw-item-clickable"
+              data-draw-href="https://lin.ee/fakeC02"
+            >
+              <div class="draw-product">CX-00 假迪卡狂怒</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
