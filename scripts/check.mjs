@@ -6,6 +6,7 @@ import { DOMParser } from "linkedom";
 import { parseDrawHtml, summarize } from "../src/parse.js";
 import { identifyStore, DEFAULT_CITIES } from "../src/stores.js";
 import { identifyProduct, groupProducts } from "../src/products.js";
+import { startAt, endAt, roundState } from "../src/schedule.js";
 
 let failed = 0;
 
@@ -180,6 +181,48 @@ console.log("\n【款式整理】");
     "分組與顯示名稱（最常見的寫法，去掉規格）",
     groups.map((g) => g.label),
     ["BX-26 獨角刺心", "UX-13 魔像奇岩", "超人力霸王聯名款"],
+  );
+}
+
+// ---- 1. 這一輪的狀態（尚未開始／進行中／已結束） ----
+console.log("\n【這一輪的狀態】");
+{
+  const at = (s) => new Date(s).getTime();
+  const a = {
+    date: "2026/10/09",
+    startTime: "11:00",
+    startText: "抽選/購買時間：2026/10/09 11:00~2026/10/10 21:00",
+  };
+  const b = {
+    date: "2026/10/09",
+    startTime: "10:00",
+    startText: "抽選日期：2026/10/09",
+  };
+  const c = {
+    date: "2026/10/09",
+    startTime: "開店",
+    startText: "抽選/購買時間：2026/10/09 開店~2026/10/10 21:00前",
+  };
+  check(
+    "開抽時刻（開店不猜時間）",
+    [startAt(a), startAt(c)],
+    [at("2026-10-09T11:00"), null],
+  );
+  check(
+    "結束時刻（只有一個日期就算到當天 23:59）",
+    [endAt(a), endAt(b)],
+    [at("2026-10-10T21:00"), at("2026-10-09T23:59")],
+  );
+  const state = (now) => roundState([a, b, c], "2026/10/09", at(now)).state;
+  check(
+    "狀態",
+    [
+      state("2026-10-09T09:59"),
+      state("2026-10-09T10:00"),
+      state("2026-10-10T21:00"),
+      state("2026-10-10T21:01"),
+    ],
+    ["before", "open", "open", "ended"],
   );
 }
 

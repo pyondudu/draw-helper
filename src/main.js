@@ -1,6 +1,8 @@
 import { loadDraws, SOURCE_PAGE } from "./source.js";
 import { buildRound } from "./round.js";
-import { loadSettings, updateNewProducts, isStoreInRange } from "./settings.js";
+import { loadSettings, updateNewProducts } from "./settings.js";
+import { loadRecords } from "./records.js";
+import { renderHome } from "./home-view.js";
 import { renderSettings } from "./settings-view.js";
 import { el } from "./dom.js";
 
@@ -13,6 +15,7 @@ const refreshBtn = document.getElementById("refresh");
 
 const settings = loadSettings();
 let round = null; // 讀取成功後的這一輪資料
+let roundDate = null; // 這一輪的日期，例如 2026/10/02
 
 function formatTime(ms) {
   const d = new Date(ms);
@@ -76,24 +79,6 @@ function renderSummary({ summary, round: roundDate, readAt, previous }) {
   statusEl.replaceChildren(card);
 }
 
-// 首頁：目前的範圍摘要和設定入口（完整的首頁在 5b 做）
-function renderHomeRange() {
-  if (!round) return;
-  const stores = round.stores.filter((s) => isStoreInRange(settings, s));
-  const wanted = round.products.filter((p) => settings.wanted.includes(p.key));
-  const card = el("div", "card");
-  card.append(
-    el("p", "", `範圍內 ${stores.length} 家門市、想要 ${wanted.length} 個款式`),
-  );
-  if (wanted.length === 0) {
-    card.append(el("p", "muted", "還沒有勾選想要的款式。"));
-  }
-  const link = el("a", "btn primary", "設定門市和款式");
-  link.href = "#settings";
-  card.append(link);
-  homeRangeEl.replaceChildren(card);
-}
-
 // 用網址的 # 切換頁面，手機的「上一頁」也能回首頁
 function route() {
   const onSettings = location.hash === "#settings" && round;
@@ -102,7 +87,8 @@ function route() {
   if (onSettings) {
     renderSettings(settingsBody, round, settings);
   } else {
-    renderHomeRange();
+    if (round)
+      renderHome(homeRangeEl, round, roundDate, settings, loadRecords());
   }
   window.scrollTo(0, 0);
 }
@@ -113,6 +99,7 @@ async function refresh() {
   const result = await loadDraws();
   if (result.ok) {
     round = buildRound(result.stores);
+    roundDate = result.round;
     updateNewProducts(
       settings,
       result.round,

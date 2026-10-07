@@ -101,6 +101,8 @@ export function renderSettings(container, round, settings) {
         settings.wanted = on
           ? [...settings.wanted, product.key]
           : settings.wanted.filter((k) => k !== product.key);
+        if (on) settings.wantedLabels[product.key] = product.label;
+        else delete settings.wantedLabels[product.key];
         update();
       }),
       info,

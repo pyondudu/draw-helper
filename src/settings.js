@@ -8,6 +8,7 @@ function defaults() {
     cities: [...DEFAULT_CITIES], // 納入範圍的縣市
     storeChoice: {}, // 個別門市的選擇 { id: true/false }，沒寫就用預設
     wanted: [], // 想要的款式 key
+    wantedLabels: {}, // 想要的款式名稱 { key: label }，這輪沒出現時也能顯示
     knownProducts: [], // 看過的款式 key（判斷「新」用）
     productsRound: null, // 上次整理「新」款式的那一輪
     newProducts: [], // 這一輪第一次出現的款式 key

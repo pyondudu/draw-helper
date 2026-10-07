@@ -7,6 +7,7 @@
   --surface: #1c2027;
   --surface-2: #2a2f38;
   --danger: #ff6b6b;
+  --good: #5cc98a;
 }
 
 * {
@@ -248,4 +249,99 @@ details.variants summary {
 details.variants ul {
   margin: 6px 0 0;
   padding-left: 18px;
+}
+
+.state {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.state-badge {
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: var(--surface-2);
+}
+
+.state-badge.open {
+  background: var(--good);
+  color: #111418;
+}
+
+.state-badge.before {
+  background: var(--accent);
+  color: #111418;
+}
+
+.progress-list {
+  margin-top: 12px;
+}
+
+details.progress {
+  margin-bottom: 6px;
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+details.progress > summary {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 12px 16px;
+  cursor: pointer;
+}
+
+details.progress > summary::-webkit-details-marker {
+  display: none;
+}
+
+.progress-name {
+  font-weight: 700;
+}
+
+.progress-name::before {
+  content: "▸ ";
+  color: var(--muted);
+}
+
+details.progress[open] .progress-name::before {
+  content: "▾ ";
+}
+
+.progress-count {
+  flex: none;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.progress-count.done {
+  color: var(--good);
+}
+
+.progress-store {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--surface-2);
+}
+
+.tag {
+  flex: none;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.tag.todo {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.missing {
+  margin-top: 12px;
 }
