@@ -1,14 +1,18 @@
 import { loadDraws, SOURCE_PAGE } from "./source.js";
+import { buildRound } from "./round.js";
+import { loadSettings, updateNewProducts, isStoreInRange } from "./settings.js";
+import { renderSettings } from "./settings-view.js";
+import { el } from "./dom.js";
 
 const statusEl = document.getElementById("status");
+const homeRangeEl = document.getElementById("homeRange");
+const homeEl = document.getElementById("home");
+const settingsEl = document.getElementById("settings");
+const settingsBody = document.getElementById("settingsBody");
 const refreshBtn = document.getElementById("refresh");
 
-function el(tag, className, text) {
-  const node = document.createElement(tag);
-  if (className) node.className = className;
-  if (text !== undefined) node.textContent = text;
-  return node;
-}
+const settings = loadSettings();
+let round = null; // 讀取成功後的這一輪資料
 
 function formatTime(ms) {
   const d = new Date(ms);
@@ -24,6 +28,7 @@ function shortDate(date) {
 
 function renderLoading() {
   statusEl.replaceChildren(el("p", "muted", "讀取中…"));
+  homeRangeEl.replaceChildren();
 }
 
 function renderError(reason) {
@@ -38,12 +43,13 @@ function renderError(reason) {
   link.rel = "noopener";
   box.append(link);
   statusEl.replaceChildren(box);
+  homeRangeEl.replaceChildren();
 }
 
-function renderSummary({ summary, round, readAt, previous }) {
+function renderSummary({ summary, round: roundDate, readAt, previous }) {
   const card = el("div", "card");
   card.append(
-    el("p", "round", round ? `${shortDate(round)} 那輪` : "這一輪"),
+    el("p", "round", roundDate ? `${shortDate(roundDate)} 那輪` : "這一輪"),
     el(
       "p",
       "",
@@ -52,7 +58,7 @@ function renderSummary({ summary, round, readAt, previous }) {
   );
 
   let change = "";
-  if (previous && previous.round === round) {
+  if (previous && previous.round === roundDate) {
     const diff = summary.uniqueLinks - previous.links;
     change =
       diff > 0
@@ -70,14 +76,57 @@ function renderSummary({ summary, round, readAt, previous }) {
   statusEl.replaceChildren(card);
 }
 
+// 首頁：目前的範圍摘要和設定入口（完整的首頁在 5b 做）
+function renderHomeRange() {
+  if (!round) return;
+  const stores = round.stores.filter((s) => isStoreInRange(settings, s));
+  const wanted = round.products.filter((p) => settings.wanted.includes(p.key));
+  const card = el("div", "card");
+  card.append(
+    el("p", "", `範圍內 ${stores.length} 家門市、想要 ${wanted.length} 個款式`),
+  );
+  if (wanted.length === 0) {
+    card.append(el("p", "muted", "還沒有勾選想要的款式。"));
+  }
+  const link = el("a", "btn primary", "設定門市和款式");
+  link.href = "#settings";
+  card.append(link);
+  homeRangeEl.replaceChildren(card);
+}
+
+// 用網址的 # 切換頁面，手機的「上一頁」也能回首頁
+function route() {
+  const onSettings = location.hash === "#settings" && round;
+  homeEl.hidden = !!onSettings;
+  settingsEl.hidden = !onSettings;
+  if (onSettings) {
+    renderSettings(settingsBody, round, settings);
+  } else {
+    renderHomeRange();
+  }
+  window.scrollTo(0, 0);
+}
+
 async function refresh() {
   refreshBtn.disabled = true;
   renderLoading();
   const result = await loadDraws();
-  if (result.ok) renderSummary(result);
-  else renderError(result.reason);
+  if (result.ok) {
+    round = buildRound(result.stores);
+    updateNewProducts(
+      settings,
+      result.round,
+      round.products.map((p) => p.key),
+    );
+    renderSummary(result);
+  } else {
+    round = null;
+    renderError(result.reason);
+  }
   refreshBtn.disabled = false;
+  route();
 }
 
+window.addEventListener("hashchange", route);
 refreshBtn.addEventListener("click", refresh);
 refresh();
