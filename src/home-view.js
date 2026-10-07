@@ -72,6 +72,9 @@ export function renderHome(container, round, roundDate, settings, records) {
     start.href = "#draw";
     actions.append(start);
   }
+  const listLink = el("a", "btn", "清單模式");
+  listLink.href = "#list";
+  actions.append(listLink);
   const link = el("a", "btn", "設定門市和款式");
   link.href = "#settings";
   actions.append(link);

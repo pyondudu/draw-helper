@@ -2,7 +2,13 @@
 // 「開店」和未註明時間的排在最後（不自己猜時間，當天都可以按）。
 import { el } from "./dom.js";
 import { isStoreInRange } from "./settings.js";
-import { loadRecords, isDrawn, setRecord, clearRecord } from "./records.js";
+import {
+  loadRecords,
+  isDrawn,
+  setRecord,
+  clearRecord,
+  recordInfo,
+} from "./records.js";
 import { startAt } from "./schedule.js";
 
 let skipped = []; // 這次使用中按了「略過」的連結，依序排到最後
@@ -118,12 +124,7 @@ export function renderDraw(container, round, roundDate, settings, onlyKey) {
   card.append(timeLine);
 
   const resultRow = el("div", "draw-results");
-  const info = {
-    round: roundDate,
-    store: `${store.city}・${store.name}`,
-    product: label,
-    startText: store.startText,
-  };
+  const info = recordInfo(roundDate, store, label);
   const won = el("button", "btn good", "中了");
   won.addEventListener("click", () => {
     setRecord(url, "won", info);

@@ -12,6 +12,8 @@ function defaults() {
     knownProducts: [], // 看過的款式 key（判斷「新」用）
     productsRound: null, // 上次整理「新」款式的那一輪
     newProducts: [], // 這一輪第一次出現的款式 key
+    listOnlyWanted: true, // 清單模式：只看想要的款式
+    listOnlyTodo: false, // 清單模式：只看未抽
   };
 }
 

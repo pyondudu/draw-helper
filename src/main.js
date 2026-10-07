@@ -5,6 +5,7 @@ import { loadRecords } from "./records.js";
 import { renderHome } from "./home-view.js";
 import { renderSettings } from "./settings-view.js";
 import { renderDraw, stopDrawView } from "./draw-view.js";
+import { renderList } from "./list-view.js";
 import { el } from "./dom.js";
 
 const statusEl = document.getElementById("status");
@@ -14,6 +15,8 @@ const settingsEl = document.getElementById("settings");
 const settingsBody = document.getElementById("settingsBody");
 const drawEl = document.getElementById("draw");
 const drawBody = document.getElementById("drawBody");
+const listEl = document.getElementById("list");
+const listBody = document.getElementById("listBody");
 const refreshBtn = document.getElementById("refresh");
 
 const settings = loadSettings();
@@ -83,13 +86,14 @@ function renderSummary({ summary, round: roundDate, readAt, previous }) {
 }
 
 // 用網址的 # 切換頁面，手機的「上一頁」也能回首頁
-// #settings：設定；#draw：連續抽選；#draw/<款式 key>：只抽這一款
+// #settings：設定；#draw：連續抽選；#draw/<款式 key>：只抽這一款；#list：清單模式
 function route() {
   const hash = decodeURIComponent(location.hash.slice(1));
   const page = round ? hash.split("/")[0] : "";
-  homeEl.hidden = page === "settings" || page === "draw";
+  homeEl.hidden = ["settings", "draw", "list"].includes(page);
   settingsEl.hidden = page !== "settings";
   drawEl.hidden = page !== "draw";
+  listEl.hidden = page !== "list";
   stopDrawView();
 
   if (page === "settings") {
@@ -97,6 +101,8 @@ function route() {
   } else if (page === "draw") {
     const onlyKey = hash.slice("draw/".length) || null;
     renderDraw(drawBody, round, roundDate, settings, onlyKey);
+  } else if (page === "list") {
+    renderList(listBody, round, roundDate, settings);
   } else if (round) {
     renderHome(homeRangeEl, round, roundDate, settings, loadRecords());
   }

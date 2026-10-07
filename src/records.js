@@ -24,6 +24,16 @@ export function isDrawn(records, url) {
   return Boolean(records[url]);
 }
 
+// 紀錄裡要存的當時文字
+export function recordInfo(roundDate, store, productLabel) {
+  return {
+    round: roundDate,
+    store: `${store.city}・${store.name}`,
+    product: productLabel,
+    startText: store.startText,
+  };
+}
+
 export function setRecord(url, status, info) {
   const records = loadRecords();
   records[url] = { ...records[url], ...info, status, at: Date.now() };
