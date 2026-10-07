@@ -10,6 +10,10 @@ const ZERO_ALIASES = [
   { keywords: ["飛鳳"], label: "烈焰飛鳳" },
 ];
 
+// 名稱更正表：店家寫錯型號時，名稱含有關鍵字就改用正確型號
+// （例如 10/2 那輪有店把「時鐘幻象 隨機強化組」寫成 CX-15）
+const NAME_FIXES = [{ keyword: "時鐘幻", code: "UX-16" }];
+
 // 型號：2～3 個英文字母 + 橫線 + 數字，例如 UX-01、BXG-04、CX-11帝王威能
 const CODE = /^([A-Z]{2,3})\s*-\s*(\d{1,3})\s*(.*)$/i;
 
@@ -36,16 +40,17 @@ function cleanName(rest) {
 export function identifyProduct(productText) {
   const text = normalizeProduct(productText);
   const m = text.match(CODE);
-  if (!m) {
-    const name = cleanName(text) || text;
-    return { key: `其他:${name}`, code: null, name };
-  }
+  const name = m ? cleanName(m[3]) : cleanName(text) || text;
+
+  const fix = NAME_FIXES.find((f) => name.includes(f.keyword));
+  if (fix) return { key: fix.code, code: fix.code, name };
+
+  if (!m) return { key: `其他:${name}`, code: null, name };
 
   let prefix = m[1].toUpperCase();
   if (prefix === "BGX") prefix = "BXG";
   const num = m[2].padStart(2, "0");
   const code = `${prefix}-${num}`;
-  const name = cleanName(m[3]);
 
   if (/^0+$/.test(num)) {
     const alias = ZERO_ALIASES.find((a) =>
