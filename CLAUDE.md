@@ -49,4 +49,5 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 與使用者協作
 
 - 使用者是程式新手：每次說明要一步步來，包含要執行的指令、在哪裡執行、預期看到什麼。
+- 改動 UI 或抽選流程後，提醒使用者用 `/phone-test` 在真實手機上驗收（Android 與 iPhone 都要）。
 - 需要輸入密碼或互動選擇的指令（`sudo`、`gh auth login`）**不能用 `! 指令`**（拿不到終端機），要請使用者另開終端機（`Ctrl+Alt+T`）執行。
